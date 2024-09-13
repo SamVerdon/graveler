@@ -19,7 +19,7 @@ func worker(jobs <-chan int, results chan<- int) {
 }
 
 func main() {
-	const pool = 8
+	const pool = 25_000
 	const upper = 1_000_000_000
 	rolls := upper / pool
 
@@ -27,9 +27,7 @@ func main() {
 	results := make(chan int, rolls)
 
 	for w := 1; w <= pool; w++ {
-		go func() {
-			worker(jobs, results)
-		}()
+		go worker(jobs, results)
 	}
 
 	for j := 1; j <= rolls; j++ {
@@ -45,5 +43,5 @@ func main() {
 		}
 	}
 
-	print(max)
+	println(max)
 }
