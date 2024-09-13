@@ -12,7 +12,7 @@ func roll() int {
 	return count
 }
 
-func worker(id int, jobs <-chan int, results chan<- int) {
+func worker(jobs <-chan int, results chan<- int) {
 	for range jobs {
 		results <- roll()
 	}
@@ -27,7 +27,9 @@ func main() {
 	results := make(chan int, rolls)
 
 	for w := 1; w <= pool; w++ {
-		go worker(w, jobs, results)
+		go func() {
+			worker(jobs, results)
+		}()
 	}
 
 	for j := 1; j <= rolls; j++ {
